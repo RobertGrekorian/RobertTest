@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Customer>
+@{
+    ViewData["Title"] = "Customers";
+}
+
+<div class="col-12">
+    <div class="row">
+        <div class="col-4">
+            <h1>@ViewData["Title"]</h1>
+        </div>
+        <div class="col-4 ">
+            <a href="/customers/create?id=${data}" class="btn btn-primary mx-2">
+                <i class="bi bi-plus"></i> Add New Customer
+            </a>
+        </div>
+        <div class="col-4">
+        </div>
+    </div>
+</div>
+
+
+<table id="myTable" class="display">
+    <thead>
+        <tr>
+            <th> Id </th>
+            <th> Name </th>
+            <th> Address </th>
+            <th> City </th>
+            <th>  </th>
+            <th>  </th>
+        </tr>
+    </thead>
+@*     <tbody>        
+        @foreach(var c in Model)
+        {
+            <tr>
+                <td class="col-2 aol-md-2"> @c.id </td>
+                <td class="col-2 aol-md-2"> @c.name </td>
+                <td class="col-2 aol-md-2"> @c.address </td>
+                <td class="col-2 aol-md-2"> @c.city </td>
+            </tr>
+        }        
+    </tbody>*@
+</table>
+
+@section scripts {
+    <script src="~/js/Ajax.js"></script>
+}
