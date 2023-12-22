@@ -1,15 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RobertTest.Models
+namespace RobertTest.Models.Dto
 {
-    public class Customer
+    public class CustomerDto
     {
-        [Key]
         public int id { get; set; }
         [Required]
         public string name { get; set; }
-        public string address { get; set; } 
+        public string address { get; set; }
         public string city { get; set; }
-        public string image { get; set; }
+        public IFormFile image { get; set; }
     }
 }

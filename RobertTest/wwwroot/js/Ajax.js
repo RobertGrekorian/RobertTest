@@ -13,6 +13,16 @@ function loadDataTable() {
         "columns": [
             { data: 'id', "width": "15%", className: 'select-checkbox',targets:0 },
             { data: 'name', "width": "10%" },
+            {
+                data: 'image',
+                "render": function (data) {
+                    return `<div >                             
+                                <img src="${data}" alt="" class="form-control image-box"/>
+                            </div>`
+                },
+                "width": "10%",
+                orderable: false
+            },
             { data: 'address', "width": "25%" },
             { data: 'city', "width": "15%" },
             {

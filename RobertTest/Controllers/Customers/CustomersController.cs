@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using RobertTest.Controllers.Home;
 using RobertTest.Data;
 using RobertTest.Models;
+using RobertTest.Models.Dto;
+using RobertTest.Services;
 
 namespace RobertTest.Controllers.Customers
 {
@@ -10,11 +12,13 @@ namespace RobertTest.Controllers.Customers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly AppDbContext _db;
+        private readonly IBlobService _blobService;
 
-        public CustomersController(ILogger<HomeController> logger, AppDbContext db)
+        public CustomersController(ILogger<HomeController> logger, AppDbContext db,IBlobService blobService)
         {
             _logger = logger;
             _db = db;
+            _blobService = blobService;
         }
         public IActionResult Customers()
         {
@@ -33,14 +37,45 @@ namespace RobertTest.Controllers.Customers
            return View();
         }
         [HttpPost]
-        public IActionResult Create(Customer customer)
+        public async Task<IActionResult> Create(CustomerDto customerDto)
         {
+            Customer customer = new Customer();
+            
+            string containerName = "reactstorage";
+            string blobName = "";
+
+            if (customerDto.image != null  && customerDto.image.Length > 0)
+            {
+                if (customerDto.id != 0)
+                {
+                    customer = _db.customers.FirstOrDefault(x => x.id == customerDto.id);
+                    if (!string.IsNullOrEmpty(customer.image))
+                    {
+                        int x = customer.image.LastIndexOf('/');
+                        bool result = await _blobService.DeleteBlob(customer.image.Substring(x), containerName);
+                    }
+                }
+
+                blobName = Guid.NewGuid().ToString() + Path.GetExtension(customerDto.image.FileName);
+
+                await _blobService.UploadBlob(blobName, containerName, customerDto.image);
+                customer.image = await  _blobService.GetBlob(blobName, containerName);
+
+            }
+
+            
+            customer.name = customerDto.name;
+            customer.address = customerDto.address;
+            customer.city = customerDto.city;
+
+            
             if (customer.id == 0)
             {
                 _db.customers.Add(customer);
             }
             else
             {
+
                 _db.customers.Update(customer);
             }
             _db.SaveChanges();
@@ -70,8 +105,14 @@ namespace RobertTest.Controllers.Customers
             ApiResponse response = new ApiResponse();
             try
             {
-
+                string containerName = "reactstorage";
+                string blobName = "";
                 Customer customer = await _db.customers.FindAsync(id);
+                if (customer.image != null)
+                {
+                    int x = customer.image.LastIndexOf('/');
+                    bool result = await _blobService.DeleteBlob(customer.image.Substring(x), containerName);
+                }
                 _db.customers.Remove(customer);
                 _db.SaveChanges();
 

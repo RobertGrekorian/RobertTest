@@ -1,5 +1,8 @@
+using Azure.Storage.Blobs;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Azure;
 using RobertTest.Data;
+using RobertTest.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +13,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("LOCAL"));
 });
+
+/***************************** adding Blob Service to connect Azure Blob *********************************/
+
+builder.Services.AddSingleton(u=> new BlobServiceClient(builder.Configuration.GetConnectionString("AzureStorage")));
+builder.Services.AddSingleton<IBlobService, BlobService>();
+
+/*********************************************************************************************************/
+builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 
