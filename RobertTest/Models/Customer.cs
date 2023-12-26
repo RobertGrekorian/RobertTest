@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RobertTest.Models
 {
@@ -11,5 +12,6 @@ namespace RobertTest.Models
         public string address { get; set; } 
         public string city { get; set; }
         public string image { get; set; }
+        public IEnumerable<Payment> Payments { get; set; }
     }
 }

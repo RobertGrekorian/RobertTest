@@ -5,26 +5,29 @@ $(document).ready(function () {
 
 function loadDataTable() {
     dataTable = $('#myTable').DataTable({
-        "ajax": { url: 'https://localhost:7196/customers/getallcustomers' },
-        buttons: [
-            { extend: 'edit',  }
-        ],
+        "ajax": { url: '/customers/getallcustomers' }, 
         select: true,
         "columns": [
-            { data: 'id', "width": "15%", className: 'select-checkbox',targets:0 },
-            { data: 'name', "width": "10%" },
+            {
+                data: 'id',
+                "render": function (data) {
+                    return `<div></div>`
+                },
+                "width": "5%", className: 'select-checkbox', targets: 0
+            },
+            { data: 'name', "width": "5%" },
             {
                 data: 'image',
                 "render": function (data) {
-                    return `<div >                             
+                    return `<div class="image-box" >                             
                                 <img src="${data}" alt="" class="form-control image-box"/>
                             </div>`
                 },
                 "width": "10%",
                 orderable: false
             },
-            { data: 'address', "width": "25%" },
-            { data: 'city', "width": "15%" },
+            { data: 'address', "width": "5%" },
+            { data: 'city', "width": "5%" },
             {
                 data: 'id',
                 "render": function (data) {
@@ -35,7 +38,7 @@ function loadDataTable() {
                                 </a>
                             </div>`
                 },
-                "width": "10%",
+                "width": "5%",
                 orderable: false
             },
             {
@@ -47,19 +50,24 @@ function loadDataTable() {
                                 > Delete &nbsp; <i class="bi bi-trash-fill"></i> </button>
                             </div>`
                 },
-                "width": "10%",
+                "width": "5%",
+                orderable: false
+            },
+            {
+                data: 'id',
+                "render": function (data) {
+                    return `<div >
+                                <a href="/customers/payment?id=${data}" class="btn btn-success mx-2">
+                                     Deposit
+                                </a>
+                            </div>`
+                },
+                "width": "5%",
                 orderable: false
             }
         ]
     });
 }
-//Activate an inline edit on click of a table cell
-//<button class="btn btn-success form-control"
-//onClick="EditCustomer('${data}')"
-//> Edit &nbsp;&nbsp;<i class="bi bi-pencil-square"></i> </button>
-table.on('click', 'tbody td:not(:first-child)', function (e) {
-    editor.inline(this);
-});
 function DeleteCustomer(id) {
     swal({
         title: "Are you sure?",
@@ -71,7 +79,8 @@ function DeleteCustomer(id) {
     .then((willDelete) => {
         if (willDelete) { 
             $.ajax({
-                url: `https://localhost:7196/customers/deletecustomer?id=${id}`,
+              //  url: `https://localhost:7196/customers/deletecustomer?id=${id}`, 
+                url: `https://roberttestapp.azurewebsites.net/customers/deletecustomer?id=${id}`,
                 type: 'DELETE',
                 success: function (data) {
                     toastr.success(`Customer id : ${id} Deleted Successfully`);
@@ -84,6 +93,17 @@ function DeleteCustomer(id) {
         }
     });
 }
-function EditCustomer(data) {
+
+function Pay(data) {
     alert(data);
+    $.ajax({
+        url: `https://localhost:7196/customers/payment/${data}`,
+       // url: `https://roberttestapp.azurewebsites.net/customers/payment/${data}`,
+        type: 'Post',
+        success: function (data) {
+            console.log(data);
+            toastr.success(`Customer id : ${data} Payment`);
+            dataTable.ajax.reload();
+        }
+    });
 }

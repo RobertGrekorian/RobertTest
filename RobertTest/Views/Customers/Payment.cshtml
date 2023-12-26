@@ -1,0 +1,110 @@
+﻿@model RobertTest.Models.Dto.CustomerPaymentVM
+
+@{
+    ViewData["Title"] = "Create";
+}
+<h1>Deposit To Your Account</h1>
+<hr />
+<form asp-action="payment" asp-controller="customers">
+    <div class="container">
+        <div class="row col-12">
+            <div class="col-6">
+            
+                <label asp-for="id" class="control-label visually-hidden"></label>
+                <input asp-for="id" class="form-control visually-hidden " />
+                <div class="form-group">
+                    <label asp-for="name" class="control-label"></label>
+                    <input asp-for="name" class="form-control disabled" readonly />
+                </div>
+                <div class="form-group">
+                    <label asp-for="address" class="control-label"></label>
+                    <input asp-for="address" class="form-control" readonly />
+                </div>
+                <div class="form-group rounded-3">
+                    <label asp-for="city" class="control-label"></label>
+                    <input asp-for="city" class="form-control" readonly />
+                    <span asp-validation-for="city" class="text-danger " ></span>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="form-group rounded-3">
+                    <img id="list" src="@Model.image" class="rounded-circle" alt="" style="width:200px;height:200px" alt="" />
+                </div>
+            </div>
+            <hr/>
+            
+            <div class="text-center col-12">
+                <p>Deposit Amount:</p>
+                <br/>
+                <div class="row">
+                    <div class="d-flex offset-4 col-4">
+                        <button id="b1" type="button" class="my-3 btn btn-primary rounded-circle" style="width:40px;height:40px"
+                                OnClientClick="handleAmount(-1)">
+                            <i class="bi bi-dash-square" style="cursor:pointer"></i>
+                        </button>
+                        <input type="currency" id="cc" asp-for="@Model.payment.Amount" style="width:70px;height:70px" class="mx-2 h2 text-center border-0" value="1" readonly></input>
+                        <button id="b2" type="button" class="my-3 btn btn-primary rounded-circle" style="width:40px;height:40px"
+                                OnClientClick="handleAmount(+1)">
+                            <i class="bi bi-plus-square" style="cursor:pointer"></i>
+                        </button>
+                    </div>
+                <br/>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-12 d-flex">
+                        <div class="col-5">
+                            <a href="Customers/Customers" class="btn btn-success  form-control">
+                                <i class="bi bi-arrow-left-square"></i> &nbsp;&nbsp;Back to List
+                            </a>
+                        </div>
+                        <div class="form-group  col-5 offset-2">
+                            <input type="submit" asp-route-id="@Model.id" class="btn btn-primary form-control " value="Make Payment" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            
+         
+        </div>
+    </div>
+</form>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+ <script type="text/javascript">
+   
+    $("#b1").click(function (e) {
+        if ($("#cc").val() > 0)
+            $("#cc").val($("#cc").val() - 1);
+    });
+    document.getElementById('b2').addEventListener('click', function (e) {
+        document.getElementById('cc').value = Number(document.getElementById('cc').value) + 1;
+        
+    });
+     
+
+    const imgInput = document.querySelector('#imginput')
+    const imgEl = document.querySelector('#list')
+
+    function handleFileSelect() {
+            if (imgInput.files && imgInput.files[0]) {
+                imgEl.src = URL.createObjectURL(imgInput.files[0]);
+                imgEl.onload = () => {
+                    URL.revokeObjectURL(imgEl.src)
+                    imgEl.src = URL.createObjectURL(imgInput.files[0]);
+                }
+            }
+    }
+    function handleAmount(x) {
+        alert("HI");
+        return false;
+     }
+ </script>

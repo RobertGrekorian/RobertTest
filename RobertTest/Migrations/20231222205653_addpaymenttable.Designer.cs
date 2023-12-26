@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RobertTest.Data;
 
@@ -11,9 +12,11 @@ using RobertTest.Data;
 namespace RobertTest.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231222205653_addpaymenttable")]
+    partial class addpaymenttable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,6 +32,9 @@ namespace RobertTest.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<int>("PaymentId")
+                        .HasColumnType("int");
 
                     b.Property<string>("address")
                         .HasColumnType("nvarchar(max)");
@@ -62,10 +68,10 @@ namespace RobertTest.Migrations
                     b.Property<string>("ClientSecret")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PaymentIntentId")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("PaymentId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("SessionId")
+                    b.Property<string>("StripePaymentId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("customerId")
@@ -76,7 +82,7 @@ namespace RobertTest.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("customerId");
+                    b.HasIndex("PaymentId");
 
                     b.ToTable("payments");
                 });
@@ -85,9 +91,7 @@ namespace RobertTest.Migrations
                 {
                     b.HasOne("RobertTest.Models.Customer", null)
                         .WithMany("Payments")
-                        .HasForeignKey("customerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PaymentId");
                 });
 
             modelBuilder.Entity("RobertTest.Models.Customer", b =>

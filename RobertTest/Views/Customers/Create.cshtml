@@ -46,27 +46,30 @@
                     <input id="imginput" type="file" onchange="handleFileSelect()" asp-for="image" class="form-control" />
                 </div>
             }
-                
-
-
-           
-            <div class="form-group">
-                @if (Model == null)
-                {
-                    <input type="submit" value= "Create" class="btn btn-primary" />
-                }
-                else
-                {
-                    <input type="submit" value="Update" class="btn btn-primary" />
-                }
+            <br/>
+            <div class="col-12 d-flex">
+                <div class="col-4">
+                    <a href="Customers/Customers" class="btn btn-success">
+                        <i class="bi bi-arrow-left-square"></i> &nbsp;&nbsp;Back to List
+                    </a>
+                </div>
+                <div class="form-group  col-4 offset-4">
+                    @if (Model == null)
+                    {
+                        <input type="submit" value= "Create" class="btn btn-primary form-control" />
+                    }
+                    else
+                    {
+                        <input type="submit" value="Update" class="btn btn-primary form-control" />
+                    }
+                </div>
             </div>
-        </form>
+        </form>      
+        
     </div>
 </div>
 
-<div>
-    <a asp-action="Customers">Back to List</a>
-</div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

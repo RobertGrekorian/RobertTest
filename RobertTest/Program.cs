@@ -1,8 +1,11 @@
 using Azure.Storage.Blobs;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
 using RobertTest.Data;
 using RobertTest.Services;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +25,25 @@ builder.Services.AddSingleton<IBlobService, BlobService>();
 /*********************************************************************************************************/
 builder.Services.AddEndpointsApiExplorer();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        b => b
+        .AllowAnyMethod()
+        .AllowAnyOrigin()
+        .AllowAnyHeader()
+       
+        );
+});
+
+
 var app = builder.Build();
+
+
+Stripe.StripeConfiguration.ApiKey = builder.Configuration.GetSection("StripeSettings:SecretKey").Get<string>();
+app.UseCors("AllowAll");
+
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -32,8 +53,10 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
 
 app.UseRouting();
 

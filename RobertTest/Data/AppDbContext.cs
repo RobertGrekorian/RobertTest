@@ -12,6 +12,7 @@ namespace RobertTest.Data
            
         }
         public DbSet<Customer> customers  { get; set; }
+        public DbSet<Payment> payments { get; set; }
 
 }
 }
