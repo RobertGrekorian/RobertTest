@@ -27,17 +27,18 @@ namespace RobertTest.Service
                 ApiType = Utility.SD.ApiType.POST,
                 Data = loginRequestDto,
                 Url = SD.AuthApiBase + "/api/auth/login"
-            });
+            }, withBearer: false);
         }
 
         public async Task<ResponseDto> RegisterAsync(RegisterRequestDto registerRequestDto)
-        {
-            return await _baseService.SendAsync(new RequestDto()
+        { 
+            var x = await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = Utility.SD.ApiType.POST,
                 Data = registerRequestDto,
                 Url = SD.AuthApiBase + "/api/auth/register"
-            });
+            }, withBearer: false);
+            return x;
         }
     }
 }

@@ -10,10 +10,13 @@ using System.Net;
 using Stripe.Checkout;
 using Microsoft.AspNetCore.Cors;
 using NuGet.Protocol;
+using Microsoft.AspNetCore.Authorization;
+using RobertTest.Utility;
 
 
 namespace RobertTest.Controllers.Customers
 {
+    
     public class CustomersController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -28,13 +31,14 @@ namespace RobertTest.Controllers.Customers
             _blobService = blobService;
             _config = config;
         }
-        
+       
         public IActionResult Customers()
         {
             IEnumerable<Customer> customers = _db.customers.ToList();
 
             return View(customers);
         }
+       
         public IActionResult Create(int id) 
         {
             if(id != 0)
@@ -126,7 +130,7 @@ namespace RobertTest.Controllers.Customers
             return Ok(response);
 
         }
-
+        [Authorize(Roles = SD.RoleAdmin)]
         [HttpDelete]
         public async Task<ActionResult> DeleteCustomer(int id)
         {

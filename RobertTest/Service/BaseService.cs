@@ -7,6 +7,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Text.Json.Serialization;
 using static RobertTest.Utility.SD;
+using System;
 
 
 namespace Mango.Web.Service
@@ -104,12 +105,13 @@ namespace Mango.Web.Service
                         };
                     case HttpStatusCode.BadRequest:
                         var apiContent1 = await apiResponse.Content.ReadAsStringAsync();
-                        
+
+                        var m = JsonConvert.DeserializeObject<ResponseDto>(apiContent1);
                         return new ResponseDto()
                         {
                             IsSuccess = false,
-                            Message = apiContent1
-                        };
+                            Message = m.Message
+                };
                     case HttpStatusCode.Forbidden:
                         return new ResponseDto()
                         {

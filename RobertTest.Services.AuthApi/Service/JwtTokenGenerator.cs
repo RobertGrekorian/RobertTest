@@ -17,7 +17,7 @@ namespace RobertTest.Services.AuthApi.Service
 
         
 
-        public string GenerateJwtToken(ApplicationUser user)
+        public string GenerateJwtToken(ApplicationUser user, IEnumerable<string> roles)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -34,6 +34,7 @@ namespace RobertTest.Services.AuthApi.Service
             claims.Add(claim1);
             claims.Add(claim2);
             claims.Add(claim3);
+            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role,role)));
 
             var tokenDescriptor = new SecurityTokenDescriptor();
             tokenDescriptor.Issuer = _config.GetValue<string>("ApiSettings:JwtOptions:Issuer");

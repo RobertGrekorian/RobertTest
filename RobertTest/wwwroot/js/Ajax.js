@@ -79,14 +79,27 @@ function DeleteCustomer(id) {
     .then((willDelete) => {
         if (willDelete) { 
             $.ajax({
-              //  url: `https://localhost:7196/customers/deletecustomer?id=${id}`, 
-                url: `https://roberttestapp.azurewebsites.net/customers/deletecustomer?id=${id}`,
+
+                url: `https://localhost:7196/customers/deletecustomer?id=${id}`,
+                // url: `https://roberttestapp.azurewebsites.net/customers/deletecustomer?id=${id}`,
                 type: 'DELETE',
                 success: function (data) {
                     toastr.success(`Customer id : ${id} Deleted Successfully`);
                     dataTable.ajax.reload();
-                }
+                },
+                error: function (data) {
+                    if (data.status == 401) {
+                        toastr.success(`You Can not Delete Customer id : ${id} (Not Authorized)`);
+                    }
+                    else
+                    if (data.status == 403) {
+                        toastr.success(`You Can not Delete Customer id : ${id} (Not Admin)`);
+                    }
+                    dataTable.ajax.reload();
+                },
             });
+
+
         }
         else {
             swal(`Your Customer with id ${id} is safe!`);
@@ -107,3 +120,15 @@ function Pay(data) {
         }
     });
 }
+
+
+//$.ajax({
+
+//    url: `https://localhost:7196/customers/deletecustomer?id=${id}`,
+//    // url: `https://roberttestapp.azurewebsites.net/customers/deletecustomer?id=${id}`,
+//    type: 'DELETE',
+//    success: function (data) {
+//        toastr.success(`Customer id : ${id} Deleted Successfully`);
+//        dataTable.ajax.reload();
+//    }
+//});

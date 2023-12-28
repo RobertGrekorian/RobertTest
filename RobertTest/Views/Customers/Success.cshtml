@@ -3,13 +3,11 @@
 @{
     ViewData["Title"] = "Create";
 }
-<h1>Create</h1>
 
-<h4>Customer</h4>
 <hr />
 <form asp-action="payment" asp-controller="customers">
     <div class="row col-12">
-        <div class="col-4 col-md-4 offset-2">
+        <div class="col-4 col-md-4 shadow offset-2">
 
             <label asp-for="id" class="control-label visually-hidden"></label>
             <input asp-for="id" class="form-control visually-hidden " />
@@ -27,28 +25,33 @@
                 <span asp-validation-for="city" class="text-danger "></span>
             </div>
         </div>
-
-        <div class="col-2 col-md-2">
-            <div class="form-group rounded-3">
-                <img id="list" src="@Model.image" class="rounded-circle" alt="" style="width:200px;height:200px" alt="" />
+        
+        <div class="col-4 col-md-3">
+            <div class="card-body shadow">
+                <div class="form-group rounded-3" style="padding-left:30px">
+                    <img id="list" src="@Model.image" class="rounded-circle" alt="" style="width:200px;height:200px" alt="" />
+                </div>
             </div>
         </div>
-        <div class="col-2 col-md-2 text-center">
-            <p>Amount Deposited successfully:</p>
-            <br />
-            <div class="d-flex">
-                
-                <input type="currency" id="cc" asp-for="@Model.payment.Amount" style="width:70px;height:70px" readonly class="mx-2 h2 text-center border-0"></input>
-                
+        <div class="col-2 col-md-2 text-center py-3">
+            <div class="card-body shadow " style="background-color:yellow">
+                <p>Amount Deposited successfully:</p>
+                <br />
+                <div class="d-flex mx-auto">
+                    <span class="mx-auto d-flex pt-3">
+                        <h2 class="align-text-bottom my-3">$</h2><input type="currency" id="cc" asp-for="@Model.payment.Amount" style="width:70px;height:70px; background-color:yellow" class="mx-auto h1 text-center border-0" value="1" readonly></input>
+                    </span>
+                </div>
             </div>
         </div>
-
 
     </div>
 </form>
-
-<div>
-    <a asp-action="Customers">Back to List</a>
+<br/><br/>
+<div class="col-12 col-md-4 offset-md-4">
+    <a href="Customers/Customers" class="btn btn-success  form-control">
+        <i class="bi bi-arrow-left-square"></i> &nbsp;&nbsp;Back to List
+    </a>
 </div>
 
 @section Scripts {

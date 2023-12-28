@@ -39,10 +39,10 @@ namespace RobertTest.Services.AuthApi.Service
                 Email = user.Email,
                 Name = user.Name,
                 PhoneNumber = user.PhoneNumber,
-                ID = user.Id,
+                ID = user.Id,                
             };
-
-            var Token = _jwtTokenGenerator.GenerateJwtToken(user);
+            var roles = await _userManager.GetRolesAsync(user);
+            var Token = _jwtTokenGenerator.GenerateJwtToken(user,roles);
             LoginResponseDto loginResponseDto = new LoginResponseDto()
             {
                 User = userDto,

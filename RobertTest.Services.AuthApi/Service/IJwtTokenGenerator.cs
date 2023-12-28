@@ -4,6 +4,6 @@ namespace RobertTest.Services.AuthApi.Service
 {
     public interface IJwtTokenGenerator
     {
-        string GenerateJwtToken(ApplicationUser user);
+        string GenerateJwtToken(ApplicationUser user,IEnumerable<string> roles);
     }
 }

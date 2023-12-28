@@ -24,6 +24,12 @@ namespace RobertTest.Controllers
             _tokenProvider = tokenProvider;
         }
         [HttpGet]
+
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+        [HttpGet]
         public IActionResult Login()
         {
             LoginRequestDto loginRequestDto = new LoginRequestDto();
@@ -45,8 +51,7 @@ namespace RobertTest.Controllers
                 return RedirectToAction(nameof(Customers),"Customers");
                 
             }
-            var x = responseDto.Message.Split(',');
-            ModelState.AddModelError("CustomError", x[2]) ;
+            ModelState.AddModelError("CustomError", responseDto.Message) ;
             TempData["error"] = "UserName Or Password Not Found!";
             return View(loginRequestDto);
         }
@@ -89,7 +94,7 @@ namespace RobertTest.Controllers
                 new SelectListItem { Text = SD.RoleCustomer, Value = SD.RoleCustomer },
             };
             ViewBag.RoleList = rolelist;
-            TempData["error"] = "Please Complete the form!";
+            TempData["error"] = responseDto.Message;
             return View(registerRequestDto);
         }
 
@@ -110,10 +115,12 @@ namespace RobertTest.Controllers
             var claim2 = new Claim(JwtRegisteredClaimNames.Email, jwt.Claims.FirstOrDefault(u => u.Type == "Email").Value);
             var claim3 = new Claim(JwtRegisteredClaimNames.Sub, jwt.Claims.FirstOrDefault(u => u.Type == "Sub").Value);
             var claim4 = new Claim(ClaimTypes.Name, jwt.Claims.FirstOrDefault(u => u.Type == "Email").Value);
+            var claim5 = new Claim(ClaimTypes.Role, jwt.Claims.FirstOrDefault(u => u.Type == "role").Value);
             identity.AddClaim(claim1);
             identity.AddClaim(claim2);
             identity.AddClaim(claim3);
             identity.AddClaim(claim4);
+            identity.AddClaim(claim5);
 
             var principal = new ClaimsPrincipal(identity);
 
